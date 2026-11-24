@@ -40,7 +40,9 @@ public class Menu {
 
     private void exibirOpcoes() {
         System.out.println("\n========== BOLONHA E MILANO ==========");
-        System.out.println("Ano: " + (partida == null ? "-" : partida.getAnoAtual()));
+        System.out.println("Ano: " +
+                (partida == null ? "-" : partida.getAnoAtual()));
+
         System.out.println("Jogador da vez: " +
                 (cidade == null ? "-" : cidade.getDono().getNome()));
 
@@ -57,7 +59,7 @@ public class Menu {
         System.out.print("Escolha uma opcao: ");
     }
 
-    private int lerOpcao() {
+    private int lerInteiro() {
         String entrada = scanner.nextLine();
 
         try {
@@ -65,6 +67,32 @@ public class Menu {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    private int lerOpcao() {
+        return lerInteiro();
+    }
+
+    private int lerQuantidade() {
+        System.out.print("Digite a quantidade: ");
+
+        int quantidade = lerInteiro();
+
+        if (quantidade <= 0) {
+            System.out.println("Quantidade invalida.");
+            return -1;
+        }
+
+        return quantidade;
+    }
+
+    private boolean exigirJogoEmAndamento() {
+        if (partida == null) {
+            System.out.println("Nenhum jogo em andamento...");
+            return false;
+        }
+
+        return true;
     }
 
     private void processarOpcao(int opcao) {
@@ -78,27 +106,19 @@ public class Menu {
                 break;
 
             case 3:
-                if (exigirJogoEmAndamento()) {
-                    abrirMercado();
-                }
+                abrirMercado();
                 break;
 
             case 4:
-                if (exigirJogoEmAndamento()) {
-                    abrirAgricultura();
-                }
+                abrirAgricultura();
                 break;
 
             case 5:
-                if (exigirJogoEmAndamento()) {
-                    abrirGoverno();
-                }
+                abrirGoverno();
                 break;
 
             case 6:
-                if (exigirJogoEmAndamento()) {
-                    abrirConstrucoes();
-                }
+                abrirConstrucoes();
                 break;
 
             case 7:
@@ -126,15 +146,6 @@ public class Menu {
                 System.out.println("Opcao invalida!");
                 break;
         }
-    }
-
-    private boolean exigirJogoEmAndamento() {
-        if (partida == null || partida.terminou()) {
-            System.out.println("Nenhuma partida em andamento.");
-            return false;
-        }
-
-        return true;
     }
 
     private void iniciarNovoJogo() {
@@ -175,12 +186,18 @@ public class Menu {
     }
 
     private void exibirStatus() {
-        if (exigirJogoEmAndamento()) {
-            cidade.exibirStatus();
+        if (!exigirJogoEmAndamento()) {
+            return;
         }
+
+        cidade.exibirStatus();
     }
 
     private void abrirMercado() {
+        if (!exigirJogoEmAndamento()) {
+            return;
+        }
+
         int opcao;
 
         do {
@@ -198,41 +215,28 @@ public class Menu {
                 case 1:
                     comprarGraos();
                     break;
+
                 case 2:
                     venderGraos();
                     break;
+
                 case 3:
                     comprarTerras();
                     break;
+
                 case 4:
                     venderTerras();
                     break;
+
                 case 0:
                     break;
+
                 default:
                     System.out.println("Opcao invalida!");
                     break;
             }
+
         } while (opcao != 0);
-    }
-
-    private int lerQuantidade() {
-        System.out.print("Digite a quantidade: ");
-
-        try {
-            int quantidade = Integer.parseInt(scanner.nextLine());
-
-            if (quantidade <= 0) {
-                System.out.println("Quantidade invalida.");
-                return -1;
-            }
-
-            return quantidade;
-
-        } catch (NumberFormatException e) {
-            System.out.println("Digite um numero inteiro valido.");
-            return -1;
-        }
     }
 
     private void comprarGraos() {
@@ -284,6 +288,10 @@ public class Menu {
     }
 
     private void abrirAgricultura() {
+        if (!exigirJogoEmAndamento()) {
+            return;
+        }
+
         boolean naAgricultura = true;
 
         while (naAgricultura) {
@@ -302,12 +310,15 @@ public class Menu {
                 case 1:
                     colher();
                     break;
+
                 case 2:
                     distribuirAlimentos();
                     break;
+
                 case 0:
                     naAgricultura = false;
                     break;
+
                 default:
                     System.out.println("Opcao invalida!");
                     break;
@@ -342,6 +353,10 @@ public class Menu {
     }
 
     private void abrirGoverno() {
+        if (!exigirJogoEmAndamento()) {
+            return;
+        }
+
         boolean noGoverno = true;
 
         while (noGoverno) {
@@ -361,15 +376,19 @@ public class Menu {
                 case 1:
                     arrecadarImpostos();
                     break;
+
                 case 2:
                     definirTaxaImposto();
                     break;
+
                 case 3:
                     definirJustica();
                     break;
+
                 case 0:
                     noGoverno = false;
                     break;
+
                 default:
                     System.out.println("Opcao invalida!");
                     break;
@@ -414,6 +433,10 @@ public class Menu {
     }
 
     private void abrirConstrucoes() {
+        if (!exigirJogoEmAndamento()) {
+            return;
+        }
+
         boolean naConstrucoes = true;
 
         while (naConstrucoes) {
@@ -433,12 +456,15 @@ public class Menu {
                 case 1:
                     recrutarSoldados();
                     break;
+
                 case 2:
                     construir();
                     break;
+
                 case 0:
                     naConstrucoes = false;
                     break;
+
                 default:
                     System.out.println("Opcao invalida!");
                     break;
@@ -471,7 +497,8 @@ public class Menu {
     }
 
     private void encerrarTurno() {
-        System.out.println("\nTurno encerrado por " + cidade.getDono().getNome() + ".");
+        System.out.println("\nTurno encerrado por "
+                + cidade.getDono().getNome() + ".");
 
         boolean fimDoAno = partida.passarTurno();
 
@@ -519,7 +546,8 @@ public class Menu {
             if (proximo == -1) {
                 System.out.println("Ja alcancou o titulo maximo!");
             } else {
-                System.out.println("Faltam " + Math.max(0, proximo - prestigio)
+                System.out.println("Faltam "
+                        + Math.max(0, proximo - prestigio)
                         + " pontos para o proximo titulo.");
             }
         }
