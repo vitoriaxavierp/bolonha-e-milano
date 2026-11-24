@@ -11,6 +11,7 @@ public class Menu {
     private Cidade cidade;
     private Mercado mercado;
     private Agricultura agricultura;
+    private Governo governo;
 
     public Menu() {
         scanner = new Scanner(System.in);
@@ -19,6 +20,7 @@ public class Menu {
         cidade = null;
         mercado = new Mercado();
         agricultura = new Agricultura();
+        governo = new Governo();
     }
 
     public void executar() {
@@ -32,16 +34,15 @@ public class Menu {
     }
 
     private void exibirOpcoes() {
-        System.out.println("==========================================");
-        System.out.println("             BOLONHA E MILANO");
-        System.out.println("==========================================");
+        System.out.println("\n========== BOLONHA E MILANO ==========");
         System.out.println("1 - Novo jogo");
         System.out.println("2 - Ver status da cidade");
         System.out.println("3 - Mercado");
         System.out.println("4 - Agricultura");
-        System.out.println("5 - Sobre o jogo");
+        System.out.println("5 - Governo");
+        System.out.println("6 - Sobre o jogo");
         System.out.println("0 - Sair");
-        System.out.print("\nEscolha uma opcao: ");
+        System.out.print("Escolha uma opcao: ");
     }
 
     private int lerOpcao() {
@@ -81,6 +82,14 @@ public class Menu {
                 break;
 
             case 5:
+                if (cidade == null) {
+                    System.out.println("Inicie um jogo primeiro.");
+                } else {
+                    abrirGoverno();
+                }
+                break;
+
+            case 6:
                 exibirSobre();
                 break;
 
@@ -274,6 +283,78 @@ public class Menu {
             System.out.println("Graos restantes: " + cidade.getGraos());
         } else {
             System.out.println("Percentual invalido. Utilize valores entre 20 e 80.");
+        }
+    }
+
+    private void abrirGoverno() {
+        boolean noGoverno = true;
+
+        while (noGoverno) {
+            System.out.println("\n========== GOVERNO ==========");
+            System.out.println("Florins: " + cidade.getFlorins());
+            System.out.println("Taxa de imposto: " + cidade.getTaxaImposto() + "%");
+            System.out.println("Nivel de justica: " + cidade.getNivelJustica());
+            System.out.println("1 - Arrecadar impostos");
+            System.out.println("2 - Definir taxa de imposto");
+            System.out.println("3 - Definir nivel de justica");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opcao: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    arrecadarImpostos();
+                    break;
+
+                case 2:
+                    definirTaxaImposto();
+                    break;
+
+                case 3:
+                    definirJustica();
+                    break;
+
+                case 0:
+                    noGoverno = false;
+                    break;
+
+                default:
+                    System.out.println("Opcao invalida!");
+                    break;
+            }
+        }
+    }
+
+    private void arrecadarImpostos() {
+        int arrecadado = governo.arrecadarImpostos(cidade);
+
+        System.out.println("Impostos arrecadados: " + arrecadado + " florins.");
+        System.out.println("Saldo atual: " + cidade.getFlorins() + " florins.");
+    }
+
+    private void definirTaxaImposto() {
+        System.out.print("Digite a taxa de imposto (0 a 50): ");
+
+        int taxa = lerOpcao();
+
+        if (governo.definirTaxaImposto(cidade, taxa)) {
+            System.out.println("Taxa de imposto atualizada!");
+        } else {
+            System.out.println("Taxa invalida. Utilize um valor entre 0 e 50.");
+        }
+    }
+
+    private void definirJustica() {
+        System.out.println("Niveis disponiveis: Justa, Moderada ou Severa");
+        System.out.print("Digite o nivel de justica: ");
+
+        String nivel = scanner.nextLine().trim();
+
+        if (governo.definirJustica(cidade, nivel)) {
+            System.out.println("Nivel de justica atualizado!");
+        } else {
+            System.out.println("Nivel invalido.");
         }
     }
 

@@ -10,6 +10,8 @@ public class Cidade {
     private int terras;
     private int graos;
     private int servos;
+    private int taxaImposto;
+    private String nivelJustica;
 
     public Cidade(String nome, Jogador dono) {
         this.nome = nome;
@@ -19,6 +21,8 @@ public class Cidade {
         this.terras = 10000;
         this.graos = 500;
         this.servos = 200;
+        this.taxaImposto = 10;
+        this.nivelJustica = "Moderada";
     }
 
     public String getNome() {
@@ -47,6 +51,22 @@ public class Cidade {
 
     public int getServos() {
         return servos;
+    }
+
+    public int getTaxaImposto() {
+        return taxaImposto;
+    }
+
+    public void setTaxaImposto(int taxaImposto) {
+        this.taxaImposto = taxaImposto;
+    }
+
+    public String getNivelJustica() {
+        return nivelJustica;
+    }
+
+    public void setNivelJustica(String nivelJustica) {
+        this.nivelJustica = nivelJustica;
     }
 
     public void avancarAno() {
@@ -115,6 +135,8 @@ public class Cidade {
         System.out.println("Terras: " + terras + " hectares");
         System.out.println("Graos: " + graos);
         System.out.println("Servos: " + servos);
+        System.out.println("Taxa de imposto: " + taxaImposto + "%");
+        System.out.println("Nivel de justica: " + nivelJustica);
         System.out.println("======================================\n");
     }
 }
