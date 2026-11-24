@@ -10,6 +10,11 @@ public class Governo {
     private static final double MULTIPLICADOR_SEVERA = 1.3;
 
     public int arrecadarImpostos(Cidade cidade) {
+
+        if (cidade.isImpostosArrecadados()) {
+            return -1;
+        }
+
         int base = cidade.getServos()
                 * cidade.getTaxaImposto() / 100;
 
@@ -20,6 +25,7 @@ public class Governo {
         int arrecadado = (int) (base * multiplicador);
 
         cidade.adicionarFlorins(arrecadado);
+        cidade.marcarImpostosArrecadados();
 
         return arrecadado;
     }
@@ -30,7 +36,6 @@ public class Governo {
         }
 
         cidade.setTaxaImposto(taxa);
-
         return true;
     }
 
@@ -42,7 +47,6 @@ public class Governo {
         }
 
         cidade.setNivelJustica(nivel);
-
         return true;
     }
 
@@ -62,3 +66,4 @@ public class Governo {
         }
     }
 }
+ 

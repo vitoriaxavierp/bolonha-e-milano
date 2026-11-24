@@ -4,6 +4,11 @@ package bolonhaemilano;
 public class Agricultura {
 
     public int processarColheita(Cidade cidade) {
+
+        if (cidade.isColheitaFeita()) {
+            return -1;
+        }
+
         int hectares = Math.min(
             cidade.getTerras(),
             cidade.getServos() * 5
@@ -21,6 +26,8 @@ public class Agricultura {
         int producao = hectares * 2;
 
         cidade.adicionarGraos(producao);
+
+        cidade.marcarColheitaFeita();
 
         return hectares;
     }
