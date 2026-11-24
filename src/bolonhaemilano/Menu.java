@@ -7,10 +7,14 @@ public class Menu {
 
     private Scanner scanner;
     private boolean emExecucao;
+    private Jogador jogador;
+    private Cidade cidade;
 
     public Menu() {
         scanner = new Scanner(System.in);
         emExecucao = true;
+        jogador = null;
+        cidade = null;
     }
 
     public void executar() {
@@ -31,7 +35,8 @@ public class Menu {
         System.out.println("   Um jogo de estrategia economica medieval");
         System.out.println("==========================================");
         System.out.println("1 - Novo jogo");
-        System.out.println("2 - Sobre o jogo");
+        System.out.println("2 - Ver status da cidade");
+        System.out.println("3 - Sobre o jogo");
         System.out.println("0 - Sair");
         System.out.print("\nEscolha uma opcao: ");
     }
@@ -49,10 +54,18 @@ public class Menu {
     private void processarOpcao(int opcao) {
         switch (opcao) {
             case 1:
-                System.out.println("\nO jogo sera iniciado em uma proxima etapa.");
+                iniciarNovoJogo();
                 break;
 
             case 2:
+                if (cidade == null) {
+                    System.out.println("\nNenhum jogo foi iniciado ainda.\n");
+                } else {
+                    cidade.exibirStatus();
+                }
+                break;
+
+            case 3:
                 exibirSobre();
                 break;
 
@@ -65,6 +78,19 @@ public class Menu {
                 System.out.println("\nOpcao invalida! Tente novamente.");
                 break;
         }
+    }
+
+    private void iniciarNovoJogo() {
+        System.out.print("\nDigite o nome do jogador: ");
+        String nomeJogador = scanner.nextLine().trim();
+
+        System.out.print("Digite o nome da cidade: ");
+        String nomeCidade = scanner.nextLine().trim();
+
+        jogador = new Jogador(nomeJogador);
+        cidade = new Cidade(nomeCidade, jogador);
+
+        cidade.exibirStatus();
     }
 
     private void exibirSobre() {
